@@ -5,7 +5,7 @@ import Sphere1 from "./Sphere1";
 
 function repeatSphere() {
   let arr = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 50; i++) {
     arr.push(
       <Sphere1
         position={[

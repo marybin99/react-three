@@ -1,15 +1,18 @@
 import React from "react";
 import { useTexture } from "@react-three/drei";
 import planet from "../assets/img/p.jpg";
-import planet1 from "../assets/img/ppp.png";
-import planet2 from "../assets/img/planet_1.png";
+import planet1 from "../assets/img/p1.jpg";
+// import earth from "../assets/img/earth.png";
 
 function Sphere1(props) {
-  // const landom = ["planet", "planet1", "planet2"];
-  // const randomValue = landom(Math.random() * landom.length);
-  // console.log(randomValue);
-  // const imgMap = useTexture(randomValue);
-  const imgMap = useTexture(planet);
+  const img = [planet, planet1];
+  const randomImg = img[parseInt(Math.random() * img.length)];
+  const colors = new Float32Array(10);
+  for (let i = 0; i < 10; i++) {
+    colors[i] = Math.random();
+  }
+
+  const imgMap = useTexture(randomImg);
   return (
     <>
       <mesh {...props}>
