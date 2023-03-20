@@ -1,6 +1,6 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { OrbitControls, Stars, PerspectiveCamera } from "@react-three/drei";
 import Sphere1 from "./Sphere1";
 
 function repeatSphere() {
@@ -8,10 +8,11 @@ function repeatSphere() {
   for (let i = 0; i < 50; i++) {
     arr.push(
       <Sphere1
+        key={i}
         position={[
-          (0.5 - Math.random()) * 50,
-          20 + (0.5 - Math.random()) * 50,
-          (0.5 - Math.random()) * 50,
+          Math.random() * 50 - 25,
+          Math.random() * 50 - 25,
+          Math.random() * 50 - 25,
         ]}
       />
     );
@@ -22,14 +23,17 @@ function repeatSphere() {
 function Layout() {
   return (
     <>
-      <Canvas>
-        <OrbitControls autoRotate={false} />
-        <ambientLight intensity={1} />
-        <spotLight position={[10, 15, 10]} angle={0.3} />
-        <Stars />
-        <Sphere1 position={[0, 0, 0]} />
-        {repeatSphere()}
-      </Canvas>
+      <div className="universe">
+        <Canvas camera={{ position: [0, 10, 10], fov: 80 }}>
+          <PerspectiveCamera makeDefault position={[5, -20, 0]} />
+          <OrbitControls autoRotate={false} />
+          <ambientLight intensity={1} />
+          <pointLight intensity={1} position={[10, 15, 10]} />
+          <Stars />
+          <Sphere1 position={[0, 0, 0]} />
+          {repeatSphere()}
+        </Canvas>
+      </div>
     </>
   );
 }

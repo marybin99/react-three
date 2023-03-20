@@ -1,24 +1,67 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useTexture } from "@react-three/drei";
+import { useSpring, animated, config } from "@react-spring/three";
 import planet from "../assets/img/p.jpg";
-import planet1 from "../assets/img/p1.jpg";
-// import earth from "../assets/img/earth.png";
 
 function Sphere1(props) {
-  const img = [planet, planet1];
-  const randomImg = img[parseInt(Math.random() * img.length)];
-  const colors = new Float32Array(10);
-  for (let i = 0; i < 10; i++) {
-    colors[i] = Math.random();
-  }
+  const imgMap = useTexture(planet);
 
-  const imgMap = useTexture(randomImg);
+  const ref = useRef();
+  const [hovered, hover] = useState(false);
+  const [clicked, click] = useState(false);
+
+  const [randomNumber, setRandomNumber] = useState(
+    Math.floor(Math.random() * 10)
+  );
+  const { scale } = useSpring({
+    scale: hovered ? 1.5 : 1,
+    config: config.wobbly,
+  });
+
+  const colors = [
+    "#FD8A8A",
+    "#FEBE8C",
+    "#FFF6BD",
+    "#C4DFAA",
+    "#AEE2FF",
+    "#8EA7E9",
+    "#DBC6EB",
+    "#FEDEFF",
+    "#C8B6A6",
+  ];
+  const [color, setColor] = useState(
+    () => `${colors[Math.floor(Math.random() * colors.length)]}`
+  );
+  const { color: animatedColor } = useSpring({
+    color,
+    config: config.molasses,
+  });
+
+  const handleClick = () => {
+    setColor(`white`);
+    click(!clicked);
+    const newRandomNumber = Math.floor(Math.random() * 10);
+    setRandomNumber(newRandomNumber);
+    console.log(newRandomNumber);
+  };
+
   return (
     <>
-      <mesh {...props}>
+      <animated.mesh
+        {...props}
+        ref={ref}
+        scale={scale}
+        onClick={handleClick}
+        onPointerOver={() => hover(true)}
+        onPointerOut={() => hover(false)}
+      >
         <sphereGeometry args={[1.3, 50, 25]}></sphereGeometry>
-        <meshStandardMaterial attach="material" map={imgMap} />
-      </mesh>
+        <animated.meshStandardMaterial
+          attach="material"
+          map={imgMap}
+          color={animatedColor}
+        />
+      </animated.mesh>
     </>
   );
 }
